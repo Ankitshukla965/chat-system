@@ -8,3 +8,7 @@ router = APIRouter(prefix="/messages", tags=["Messages"])
 @router.post("", response_model=MessageResponse, status_code=201)
 def create_message(message: MessageCreate):
     return message_service.create_message(message)
+
+@router.get("", response_model=list[MessageResponse])
+def get_messages():
+    return message_service.get_messages()

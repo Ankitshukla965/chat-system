@@ -1,11 +1,11 @@
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, UserResponse
 
 
 users_db = []
 next_user_id = 1
 
 
-def create_user(user: UserCreate):
+def create_user(user: UserCreate) -> UserResponse:
     global next_user_id
 
     new_user = {
@@ -19,10 +19,10 @@ def create_user(user: UserCreate):
 
     return new_user
 
-def get_all_users():
+def get_all_users() -> UserResponse:
     return users_db
 
-def get_user_by_id(user_id: int):
+def get_user_by_id(user_id: int) -> UserResponse:
     for user in users_db:
         if user["id"] == user_id:
             return user

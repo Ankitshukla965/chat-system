@@ -21,3 +21,6 @@ def create_message(message: MessageCreate) -> MessageResponse:
     message_id_counter += 1
 
     return new_message
+
+def get_message() -> list[MessageResponse]:
+    return messages
