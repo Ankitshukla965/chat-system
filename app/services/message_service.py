@@ -1,26 +1,29 @@
 from datetime import datetime
 from app.schemas.message import MessageCreate, MessageResponse
+from sqlalchemy.orm import Session
+from app.models.message import Message
 
 
 messages = []
 message_id_counter = 1
 
 
-def create_message(message: MessageCreate) -> MessageResponse:
-    global message_id_counter
+def create_message(message: MessageCreate, db: Session):
+  
 
-    new_message = MessageResponse(
-        id=message_id_counter,
+    db_message = Message(
+        
         chat_id=message.chat_id,
         sender_id=message.sender_id,
         content=message.content,
-        created_at=datetime.now
+     
     )
-
-    messages.append(new_message)
-    message_id_counter += 1
-
-    return new_message
+    
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+ 
+    return db_message
 
 def get_message() -> list[MessageResponse]:
     return messages
