@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from app.schemas.message import MessageCreate, MessageResponse
 from app.services import message_service
 from sqlalchemy.orm import Session
@@ -12,5 +12,5 @@ def create_message(message: MessageCreate, db: Session = Depends(get_db)):
     return message_service.create_message(message, db)
 
 @router.get("", response_model=list[MessageResponse])
-def get_messages():
-    return message_service.get_messages()
+def get_messages(chat_id: int = Query(gt=0), db: Session = Depends(get_db)):
+    return message_service.get_message(chat_id, db)

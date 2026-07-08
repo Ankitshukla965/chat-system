@@ -2,10 +2,11 @@ from datetime import datetime
 from app.schemas.message import MessageCreate, MessageResponse
 from sqlalchemy.orm import Session
 from app.models.message import Message
+from fastapi import Query
+from sqlalchemy import select
 
 
-messages = []
-message_id_counter = 1
+
 
 
 def create_message(message: MessageCreate, db: Session):
@@ -25,5 +26,11 @@ def create_message(message: MessageCreate, db: Session):
  
     return db_message
 
-def get_message() -> list[MessageResponse]:
+def get_message(chat_id, db) -> list[Message]:
+    statement = (
+    select(Message)
+    .where(Message.chat_id == chat_id)
+    .order_by(Message.created_at)
+)
+    messages = db.scalars(statement).all()
     return messages
