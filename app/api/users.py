@@ -9,7 +9,13 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("", response_model=UserResponse, status_code=201)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    return user_services.create_user(user, db)
+    try:
+        return user_services.create_user(user, db)
+    except user_services.EmailAlreadyExistsError:
+        raise HTTPException(
+            status_code=409,
+            detail="Email already registered",
+    )
 
 
 @router.get("", response_model=list[UserResponse])
@@ -33,11 +39,11 @@ def get_user(user_id: int,  db: Session = Depends(get_db)):
     return user
 
 @router.delete("/{user_id}", status_code=204)
-def delete_user(user_id: int):
-    deleted = user_services.delete_user(user_id)
+def delete_user(user_id: int, db: Session=Depends(get_db)):
+    deleted = user_services.delete_user(user_id, db)
     
     if not deleted:
         raise HTTPException(
             status_code=404,
-            details="User Not Found"
+            detail="User Not Found"
         )

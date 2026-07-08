@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.db import Base, engine
 from app.models.message import Message
 from app.models.user import User
+from app.models.conversation import Conversation
 from app.api.health import router as health_router
 from app.api.users import router as users_router
 from app.api.messages import router as message_router

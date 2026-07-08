@@ -2,10 +2,13 @@ from app.schemas.user import UserCreate, UserResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.models.user import User
+from sqlalchemy.exc import IntegrityError
 
 users_db = []
 next_user_id = 1
 
+class EmailAlreadyExistsError(Exception):
+    pass
 
 def create_user(user: UserCreate, db: Session) -> UserResponse:
    
@@ -16,7 +19,11 @@ def create_user(user: UserCreate, db: Session) -> UserResponse:
     )
     
     db.add(new_user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as error:
+        db.rollback()
+        raise EmailAlreadyExistsError() from error
     db.refresh(new_user)
   
 
@@ -34,13 +41,17 @@ def get_user_by_id(user_id: int, db: Session) -> User:
 
    
 
-def delete_user(user_id: int):
+def delete_user(id: int, db: Session):
 
-    global users_db
+    user = db.get(User, id)
+    if user is not None:
+        db.delete(user)
+        db.commit()
+        return True
+    else:
+        return False
 
-    for user in users_db:
-        if user["id"] == user_id:
-            users_db.remove(user)
-            return True
 
-    return False
+
+
+ 
