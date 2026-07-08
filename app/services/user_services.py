@@ -22,12 +22,12 @@ def create_user(user: UserCreate, db: Session) -> UserResponse:
 
     return new_user
 
-def get_all_users(db: Session) -> UserResponse:
+def get_all_users(db: Session) -> list[User]:
     statement = select(User)
     users = db.scalars(statement).all()
     return users
 
-def get_user_by_id(user_id: int, db: Session) -> UserResponse:
+def get_user_by_id(user_id: int, db: Session) -> User:
     user = db.get(User, user_id) 
     
     return user
