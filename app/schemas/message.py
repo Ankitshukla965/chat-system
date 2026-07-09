@@ -11,7 +11,8 @@ class MessageCreate(BaseModel):
 class MessageResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    chat_id: int
+    conversation_id: int
     sender_id: int
+    receiver_id: int
     content: str
     created_at: datetime

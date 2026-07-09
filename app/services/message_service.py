@@ -5,17 +5,18 @@ from app.models.message import Message
 from fastapi import Query
 from sqlalchemy import select
 
-
+conversation_id = 1
 
 
 
 def create_message(message: MessageCreate, db: Session):
-  
+    
 
     db_message = Message(
         
-        chat_id=message.chat_id,
+        conversation_id=conversation_id,
         sender_id=message.sender_id,
+        receiver_id=message.receiver_id,
         content=message.content,
      
     )
