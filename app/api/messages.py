@@ -12,5 +12,5 @@ def create_message(message: MessageCreate, db: Session = Depends(get_db)):
     return message_service.create_message(message, db)
 
 @router.get("", response_model=list[MessageResponse])
-def get_messages(chat_id: int = Query(gt=0), db: Session = Depends(get_db)):
-    return message_service.get_message(chat_id, db)
+def get_messages(conversation_id: int = Query(gt=0), db: Session = Depends(get_db)):
+    return message_service.get_message(conversation_id, db)

@@ -3,8 +3,9 @@ from pydantic import BaseModel, ConfigDict
 
 
 class MessageCreate(BaseModel):
-    chat_id: int
+    
     sender_id: int
+    recipient_id: int
     content: str
 
 
@@ -13,6 +14,6 @@ class MessageResponse(BaseModel):
     id: int
     conversation_id: int
     sender_id: int
-    receiver_id: int
+    recipient_id: int
     content: str
     created_at: datetime
