@@ -14,6 +14,5 @@ class MessageResponse(BaseModel):
     id: int
     conversation_id: int
     sender_id: int
-    recipient_id: int
     content: str
     created_at: datetime

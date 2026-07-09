@@ -9,7 +9,13 @@ router = APIRouter(prefix="/messages", tags=["Messages"])
 
 @router.post("", response_model=MessageResponse, status_code=201)
 def create_message(message: MessageCreate, db: Session = Depends(get_db)):
-    return message_service.create_message(message, db)
+    try:
+        return message_service.create_message(message, db)
+    except message_service.SameSenderRecipientError:
+        raise HTTPException(
+            status_code=400,
+            detail="sender_id and recipient_id cannot be the same"
+        )
 
 @router.get("", response_model=list[MessageResponse])
 def get_messages(conversation_id: int = Query(gt=0), db: Session = Depends(get_db)):
