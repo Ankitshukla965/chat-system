@@ -16,6 +16,11 @@ def create_message(message: MessageCreate, db: Session = Depends(get_db)):
             status_code=400,
             detail="sender_id and recipient_id cannot be the same"
         )
+    except message_service.InvalidUserError:
+        raise HTTPException(
+            status_code=404,
+            detail="Sender or recipient user not found"
+        )
 
 @router.get("", response_model=list[MessageResponse])
 def get_messages(conversation_id: int = Query(gt=0), db: Session = Depends(get_db)):
