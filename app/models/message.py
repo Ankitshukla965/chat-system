@@ -10,4 +10,4 @@ class Message(Base):
     conversation_id = Column(Integer, index=True)
     sender_id = Column(Integer, index=True)
     content = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, default=datetime.now)

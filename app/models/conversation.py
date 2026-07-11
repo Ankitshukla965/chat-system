@@ -16,7 +16,7 @@ class Conversation(Base):
     id = Column(Integer, primary_key=True, index=True)
     participant_one_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     participant_two_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, default=datetime.now(), nullable=False)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
 
     __table_args__=(
         UniqueConstraint(

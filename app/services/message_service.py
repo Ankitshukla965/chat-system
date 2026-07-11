@@ -63,7 +63,7 @@ def create_message(message: MessageCreate, db: Session):
 
     db.add(db_message)
     db.flush()
-    db.refresh(db_message)
+    
     
     event_payload = {
         "message_id": db_message.id,
@@ -73,8 +73,8 @@ def create_message(message: MessageCreate, db: Session):
     }
 
     event = MessageEvents(
-        event_type="Message Sent",
-        status="Pending",
+        event_type="messsage_sent",
+        status="pending",
         payload=event_payload
 
     )
