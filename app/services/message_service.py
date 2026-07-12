@@ -7,6 +7,7 @@ from app.models.events import MessageEvents
 from fastapi import Query
 from sqlalchemy import select
 from app.models.user import User
+from app.enum import EventStatus, EventType
 
 
 class SameSenderRecipientError(Exception):
@@ -73,8 +74,8 @@ def create_message(message: MessageCreate, db: Session):
     }
 
     event = MessageEvents(
-        event_type="messsage_sent",
-        status="pending",
+        event_type= EventType.MESSAGESENT.value,
+        status=EventStatus.PENDING.value,
         payload=event_payload
 
     )

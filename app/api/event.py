@@ -6,6 +6,6 @@ from app.services import event_services
 
 router = APIRouter(prefix="/events", tags=["events"])
 
-router.post("/", status_code=201)
-def publish_event(db: Session=Depends(get_db())):
-    return event_services.publish_event(db)
+@router.post("/", status_code=201)
+def publish_event(db: Session=Depends(get_db)):
+    return event_services.process_next_event(db)
