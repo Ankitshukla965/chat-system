@@ -9,3 +9,7 @@ router = APIRouter(prefix="/events", tags=["events"])
 @router.post("/", status_code=201)
 def publish_event(db: Session=Depends(get_db)):
     return event_services.process_next_event(db)
+
+@router.post("/async", status_code=201)
+async def async_process_next_event(db: Session=Depends(get_db)):
+    return await event_services.async_process_next_event(db)

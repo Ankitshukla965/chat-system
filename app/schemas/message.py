@@ -16,3 +16,9 @@ class MessageResponse(BaseModel):
     sender_id: int
     content: str
     created_at: datetime
+
+class MessageListResponse(BaseModel):
+    items: list[MessageResponse]
+    limit: int
+    offset: int
+    count: int

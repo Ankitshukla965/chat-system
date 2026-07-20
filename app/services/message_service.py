@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.schemas.message import MessageCreate, MessageResponse
+from app.schemas.message import MessageCreate, MessageResponse, MessageListResponse
 from sqlalchemy.orm import Session
 from app.models.message import Message
 from app.models.conversation import Conversation
@@ -8,6 +8,8 @@ from fastapi import Query
 from sqlalchemy import select
 from app.models.user import User
 from app.enum import EventStatus, EventType
+import logging
+logger = logging.getLogger(__name__)
 
 
 class SameSenderRecipientError(Exception):
@@ -29,6 +31,7 @@ def create_message(message: MessageCreate, db: Session):
 
     if sender is None or recipient is None:
         raise MessageParticipantNotFoundError()
+        
 
 
    
@@ -86,14 +89,21 @@ def create_message(message: MessageCreate, db: Session):
     return db_message
               
 
-def get_message(conversation_id, db) -> list[Message]:
+def get_message(conversation_id, limit, offset, db) -> list[Message]:
     statement = (
     select(Message)
     .where(Message.conversation_id == conversation_id)
     .order_by(Message.created_at)
+    .limit(limit)
+    .offset(offset)
 )
     messages = db.scalars(statement).all()
-    return messages
+    return MessageListResponse(
+    items=messages,
+    limit=limit,
+    offset=offset,
+    count=len(messages)
+)
 
 
 
