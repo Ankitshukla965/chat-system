@@ -8,9 +8,10 @@ from app.api.health import router as health_router
 from app.api.users import router as users_router
 from app.api.messages import router as message_router
 from app.api.event import router as event_router
+from app.config import settings
 
-app = FastAPI(title="Chat System API")
-
+app = FastAPI(title=settings.app_name)
+print("App name =", settings.app_name)
 Base.metadata.create_all(bind=engine)
 
 app.include_router(health_router)
