@@ -4,6 +4,7 @@ from app.services import message_service
 from sqlalchemy.orm import Session
 from app.db import get_db
 import logging
+from app.error import api_error
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
@@ -14,14 +15,16 @@ def create_message(message: MessageCreate, db: Session = Depends(get_db)):
     try:
         return message_service.create_message(message, db)
     except message_service.SameSenderRecipientError:
+       
         raise HTTPException(
             status_code=400,
-            detail="sender_id and recipient_id cannot be the same"
+            detail= api_error("SAME_SENDER_RECIPIENT_ERROR", "Same Sender and Recipient Error", None)
+        
         )
     except message_service.MessageParticipantNotFoundError:
         raise HTTPException(
             status_code=404,
-            detail="Sender or recipient user not found"
+            detail=api_error("MESSAGE_PARTCIPANTS_NOT_FOUND", "Message Participants Not Found", "None")
         )
 
 @router.get("", response_model=MessageListResponse)
